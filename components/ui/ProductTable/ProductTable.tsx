@@ -3,6 +3,7 @@
 // Components
 import {
   Button,
+  Input,
   Table,
   TableHead,
   TableHeader,
@@ -23,6 +24,7 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 
 interface ProductTableProps<TData, TValue> {
@@ -34,16 +36,29 @@ export const ProductTable = <TData, TValue>({
   columns,
   data,
 }: ProductTableProps<TData, TValue>) => {
+  const [globalFilter, setGlobalFilter] = useState("");
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
+    state: {
+      globalFilter,
+    },
   });
 
   return (
     <>
       <div className="mb-2 grid grid-cols-3">
+        <Input
+          placeholder="Search for a product"
+          value={globalFilter}
+          type="text"
+          onChange={(e) => setGlobalFilter(String(e.target.value))}
+        />
         <div className="child:mx-1">
           <Button
             variant="outline"
