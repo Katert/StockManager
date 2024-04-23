@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 
 // Utils
-import { convertCsvData } from "@/lib";
+import { convertCsvData, divideProductsInSegments } from "@/lib";
 
 // Types
 import type { NextRequest } from "next/server";
@@ -24,7 +24,12 @@ export async function GET(request: NextRequest) {
       };
     };
 
-    return new NextResponse(JSON.stringify(data), {
+    // Add a segment property to each product object before returning data
+    const products = await divideProductsInSegments(
+      data.map(convertCsvProduct)
+    );
+
+    return new NextResponse(JSON.stringify(products), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
@@ -35,9 +40,9 @@ export async function GET(request: NextRequest) {
       JSON.stringify({ error: "Error retrieving data." }),
       {
         status: 500,
-        headers: {
+        headers: new Headers({
           "Content-Type": "application/json",
-        },
+        }),
       }
     );
   }

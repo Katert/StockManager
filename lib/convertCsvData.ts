@@ -23,7 +23,6 @@ export const convertCsvData = async (relativePath: string) => {
       columns: true,
     });
 
-    console.log(data);
     return data;
   } catch (error) {
     return console.log(error);
