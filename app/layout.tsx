@@ -22,7 +22,7 @@ export default function RootLayout({
     <html className={NeueMontreal.className} lang="en">
       <body className="flex min-h-screen flex-col text-slate-700">
         <Header />
-        <main className="flex-grow">{children}</main>
+        <main className="flex flex-grow flex-col">{children}</main>
         <Footer />
       </body>
     </html>
