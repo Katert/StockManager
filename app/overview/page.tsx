@@ -8,11 +8,15 @@ import { ProductTable } from "@/components/ui";
 import { columns } from "./table-columns";
 
 const getData = async (): Promise<Product[]> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/stock`
-  );
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/stock`
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default async function Overview() {
