@@ -18,7 +18,7 @@ const getData = async (): Promise<Product[]> => {
 export default async function Overview() {
   const data: Product[] = await getData();
   return (
-    <section className="mx-16 md:mx-48">
+    <section className="mx-16 lg:mx-48">
       <ProductTable columns={columns} data={data} />
     </section>
   );

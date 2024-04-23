@@ -81,14 +81,15 @@ export const ProductTable = <TData, TValue>({
 
   return (
     <>
-      <div className="mb-2 grid grid-cols-3">
+      <div className="mb-2 lg:grid lg:grid-cols-3">
         <Input
+          className="mb-2 lg:mb-0"
           placeholder="Search for a product"
           value={globalFilter}
           type="text"
           onChange={(e) => setGlobalFilter(String(e.target.value))}
         />
-        <div className="ml-2 place-self-start">
+        <div className="mb-2 inline lg:mb-0 lg:ml-2 lg:block lg:place-self-start">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary">
@@ -123,12 +124,13 @@ export const ProductTable = <TData, TValue>({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="place-self-end child:mx-1">
+        <div className="ml-2 inline lg:block lg:place-self-end">
           <Button
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            className="mr-1"
           >
             Vorige
           </Button>
@@ -137,6 +139,7 @@ export const ProductTable = <TData, TValue>({
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            className="ml-1"
           >
             Volgende
           </Button>
