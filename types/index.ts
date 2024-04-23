@@ -1,1 +1,1 @@
-export type { Product } from "./Product.type";
+export type { Product, ProductFromCSV } from "./Product.type";
