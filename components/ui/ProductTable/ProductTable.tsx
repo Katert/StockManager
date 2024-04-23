@@ -18,7 +18,11 @@ import { useReactTable } from "@tanstack/react-table";
 import { useState, useMemo } from "react";
 
 // Util
-import { flexRender, getCoreRowModel } from "@tanstack/react-table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+} from "@tanstack/react-table";
 
 interface ProductTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,6 +37,7 @@ export const ProductTable = <TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
