@@ -6,7 +6,7 @@ import { CircleLoader } from "react-spinners";
 const Loading = () => {
   return (
     <section className="mx-48 flex flex-grow items-center justify-center">
-      <CircleLoader color="white" size={50} />
+      <CircleLoader color="black" size={50} />
     </section>
   );
 };
