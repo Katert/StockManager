@@ -24,7 +24,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 // Hooks
 import { useReactTable } from "@tanstack/react-table";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useReducer } from "react";
 
 // Util
 import {
@@ -45,27 +45,55 @@ export const ProductTable = <TData, TValue>({
 }: ProductTableProps<TData, TValue>) => {
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const [showSegment1, setShowSegment1] = useState<boolean>(false);
-  const [showSegment2, setShowSegment2] = useState<boolean>(false);
-  const [showSegment3, setShowSegment3] = useState<boolean>(false);
-  const [showSegment4, setShowSegment4] = useState<boolean>(false);
+  const segmentReducer = (
+    state: any,
+    action: { type: string; segment: string }
+  ) => {
+    switch (action.type) {
+      case "TOGGLE_SEGMENT":
+        return {
+          ...state,
+          [action.segment]: !state[action.segment],
+        };
+      default:
+        throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  };
+
+  const [segments, dispatch] = useReducer(segmentReducer, {
+    segment1: false,
+    segment2: false,
+    segment3: false,
+    segment4: false,
+  });
 
   const filteredData = useMemo(() => {
     // If none of the segments are selected, return all data.
-    if (!showSegment1 && !showSegment2 && !showSegment3 && !showSegment4) {
+    if (
+      !segments.segment1 &&
+      !segments.segment2 &&
+      !segments.segment3 &&
+      !segments.segment4
+    ) {
       return data;
     }
 
     // Filter data to only include the products from the active segments.
     return data.filter((product: any) => {
       return (
-        (showSegment1 && product.segment === 1) ||
-        (showSegment2 && product.segment === 2) ||
-        (showSegment3 && product.segment === 3) ||
-        (showSegment4 && product.segment === 4)
+        (segments.segment1 && product.segment === 1) ||
+        (segments.segment2 && product.segment === 2) ||
+        (segments.segment3 && product.segment === 3) ||
+        (segments.segment4 && product.segment === 4)
       );
     });
-  }, [showSegment1, showSegment2, showSegment3, showSegment4, data]);
+  }, [
+    segments.segment1,
+    segments.segment2,
+    segments.segment3,
+    segments.segment4,
+    data,
+  ]);
 
   const table = useReactTable({
     data: filteredData,
@@ -98,26 +126,34 @@ export const ProductTable = <TData, TValue>({
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuCheckboxItem
-                checked={showSegment1}
-                onCheckedChange={() => setShowSegment1(!showSegment1)}
+                checked={segments.segment1}
+                onCheckedChange={() =>
+                  dispatch({ type: "TOGGLE_SEGMENT", segment: "segment1" })
+                }
               >
                 Segment 1
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={showSegment2}
-                onCheckedChange={() => setShowSegment2(!showSegment2)}
+                checked={segments.segment2}
+                onCheckedChange={() =>
+                  dispatch({ type: "TOGGLE_SEGMENT", segment: "segment2" })
+                }
               >
                 Segment 2
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={showSegment3}
-                onCheckedChange={() => setShowSegment3(!showSegment3)}
+                checked={segments.segment3}
+                onCheckedChange={() =>
+                  dispatch({ type: "TOGGLE_SEGMENT", segment: "segment3" })
+                }
               >
                 Segment 3
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={showSegment4}
-                onCheckedChange={() => setShowSegment4(!showSegment4)}
+                checked={segments.segment4}
+                onCheckedChange={() =>
+                  dispatch({ type: "TOGGLE_SEGMENT", segment: "segment4" })
+                }
               >
                 Segment 4
               </DropdownMenuCheckboxItem>
