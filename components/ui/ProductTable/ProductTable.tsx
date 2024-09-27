@@ -24,7 +24,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 // Hooks
 import { useReactTable } from "@tanstack/react-table";
-import { useState, useMemo } from "react";
+import { useState, useReducer, useMemo } from "react";
 
 // Util
 import {
@@ -39,16 +39,44 @@ interface ProductTableProps<TData, TValue> {
   data: TData[];
 }
 
+// Segment reducer
+type SegmentState = {
+  showSegment1: boolean;
+  showSegment2: boolean;
+  showSegment3: boolean;
+  showSegment4: boolean;
+};
+
+type SegmentAction = { type: "TOGGLE_SEGMENT"; payload: keyof SegmentState };
+
+const TOGGLE_SEGMENT = "TOGGLE_SEGMENT";
+
+const initialState = {
+  showSegment1: false,
+  showSegment2: false,
+  showSegment3: false,
+  showSegment4: false,
+};
+
+const segmentReducer = (state: SegmentState, action: SegmentAction) => {
+  switch (action.type) {
+    case TOGGLE_SEGMENT:
+      return {
+        ...state,
+        [action.payload]: !state[action.payload],
+      };
+    default:
+      return state;
+  }
+};
+
 export const ProductTable = <TData, TValue>({
   columns,
   data,
 }: ProductTableProps<TData, TValue>) => {
   const [globalFilter, setGlobalFilter] = useState("");
-
-  const [showSegment1, setShowSegment1] = useState<boolean>(false);
-  const [showSegment2, setShowSegment2] = useState<boolean>(false);
-  const [showSegment3, setShowSegment3] = useState<boolean>(false);
-  const [showSegment4, setShowSegment4] = useState<boolean>(false);
+  const [state, dispatch] = useReducer(segmentReducer, initialState);
+  const { showSegment1, showSegment2, showSegment3, showSegment4 } = state;
 
   const filteredData = useMemo(() => {
     // If none of the segments are selected, return all data.
@@ -66,6 +94,10 @@ export const ProductTable = <TData, TValue>({
       );
     });
   }, [showSegment1, showSegment2, showSegment3, showSegment4, data]);
+
+  const toggleSegment = (segment: any) => {
+    dispatch({ type: TOGGLE_SEGMENT, payload: segment });
+  };
 
   const table = useReactTable({
     data: filteredData,
@@ -99,25 +131,25 @@ export const ProductTable = <TData, TValue>({
             <DropdownMenuContent>
               <DropdownMenuCheckboxItem
                 checked={showSegment1}
-                onCheckedChange={() => setShowSegment1(!showSegment1)}
+                onCheckedChange={() => toggleSegment("showSegment1")}
               >
                 Segment 1
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={showSegment2}
-                onCheckedChange={() => setShowSegment2(!showSegment2)}
+                onCheckedChange={() => toggleSegment("showSegment2")}
               >
                 Segment 2
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={showSegment3}
-                onCheckedChange={() => setShowSegment3(!showSegment3)}
+                onCheckedChange={() => toggleSegment("showSegment3")}
               >
                 Segment 3
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={showSegment4}
-                onCheckedChange={() => setShowSegment4(!showSegment4)}
+                onCheckedChange={() => toggleSegment("showSegment4")}
               >
                 Segment 4
               </DropdownMenuCheckboxItem>
