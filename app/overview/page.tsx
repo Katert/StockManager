@@ -10,12 +10,14 @@ import { columns } from "./table-columns";
 const getData = async (): Promise<Product[]> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/stock`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/stock`,
+      { cache: "no-store" }
     );
     const data = await response.json();
     return data;
   } catch (error) {
-    throw error;
+    console.error("Error fetching product data", error);
+    return [];
   }
 };
 

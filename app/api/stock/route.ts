@@ -5,10 +5,9 @@ import { NextResponse } from "next/server";
 import { convertCsvData, divideProductsInSegments } from "@/lib";
 
 // Types
-import type { NextRequest } from "next/server";
 import type { Product, ProductFromCSV } from "@/types";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Convert csv to array of objects
     const data = await convertCsvData("/data/stock-data.csv");
@@ -19,7 +18,9 @@ export async function GET(request: NextRequest) {
         id: parseInt(csvProduct.ID),
         location: csvProduct.Location,
         shelfNumber: parseInt(csvProduct.ShelfNumber),
-        stockAmount: parseInt(csvProduct.StockAmount),
+        stockAmount: isNaN(Number(csvProduct.StockAmount))
+          ? csvProduct.StockAmount
+          : parseInt(csvProduct.StockAmount),
         name: csvProduct.ProductName,
       };
     };
