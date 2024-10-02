@@ -47,11 +47,11 @@ type SegmentState = {
   showSegment4: boolean;
 };
 
-type SegmentAction = { type: "TOGGLE_SEGMENT"; payload: keyof SegmentState };
-
 const TOGGLE_SEGMENT = "TOGGLE_SEGMENT";
 
-const initialState = {
+type SegmentAction = { type: "TOGGLE_SEGMENT"; payload: keyof SegmentState };
+
+const initialState: SegmentState = {
   showSegment1: false,
   showSegment2: false,
   showSegment3: false,
@@ -95,7 +95,7 @@ export const ProductTable = <TData, TValue>({
     });
   }, [showSegment1, showSegment2, showSegment3, showSegment4, data]);
 
-  const toggleSegment = (segment: any) => {
+  const toggleSegment = (segment: keyof SegmentState) => {
     dispatch({ type: TOGGLE_SEGMENT, payload: segment });
   };
 

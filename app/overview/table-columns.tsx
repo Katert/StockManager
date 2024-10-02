@@ -1,5 +1,3 @@
-"use client";
-
 // Types
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Product } from "@/types";
